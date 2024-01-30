@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\MessageBag;
 
 class AuthController extends Controller
 {
@@ -26,6 +27,8 @@ class AuthController extends Controller
             'password' => Hash::make($password)
         ]);
 
+        Auth::login($user);
+
         return redirect('/notes');   
     }
 
@@ -33,10 +36,13 @@ class AuthController extends Controller
     {
 
         if (Auth::attempt($request->only(['password', 'email']))) {
-
+            session()->regenerate();
             return redirect('/notes');
         }
 
-        return response()->json(["error" => "Provided credentials are invalid!"], 403);
+        $errors = new MessageBag();
+        $errors->add('login_failed', 'Invalid credentials');
+
+        return back()->withErrors($errors);
     }
 }
