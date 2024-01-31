@@ -22,4 +22,4 @@ Route::prefix('auth')->group(function() {
     Route::view('/login', 'login');
 });
 
-Route::resource('/notes', NotesController::class);
+Route::resource('/notes', NotesController::class)->middleware('auth');

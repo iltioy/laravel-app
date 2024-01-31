@@ -3,18 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Note;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
     public function index(Request $request)
     {
-        echo '<pre>';
-        var_dump($request->user());
-        echo '</pre>';
+        $notes = $request->user()->notes()->orderBy('created_at', 'desc')->get();
+
+        return view('notes.notes', [ 'notes' => $notes]);
     }
 
     /**
@@ -22,7 +25,7 @@ class NotesController extends Controller
      */
     public function create()
     {
-        //
+        return view('notes.create');
     }
 
     /**
@@ -30,15 +33,27 @@ class NotesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $body = $request->input('note');
+
+        $note = new Note();
+        $note->body = $body;
+        $note->user()->associate(Auth::user());
+        $note->save();
+
+        return redirect('/notes');
     }
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        //
+    {   
+        $note = Note::find($id);
+
+        if(!$note) {
+            return redirect()->back();
+        }
+        return view('notes.note', ['note' => $note]);
     }
 
     /**
@@ -46,7 +61,8 @@ class NotesController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $note = Note::find($id);
+        return view('notes.edit', ['note' => $note]);
     }
 
     /**
@@ -54,7 +70,15 @@ class NotesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $note = Note::find($id);
+        $body = $request->input('note');
+
+        if($note && $note->user_id === Auth::id()) {
+            $note->body = $body;
+            $note->save();
+        }
+
+        return redirect()->route('notes.index'); 
     }
 
     /**
@@ -62,6 +86,12 @@ class NotesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $note = Note::find($id);
+
+        if($note->user_id === Auth::id()) {
+            $note->delete();
+        }
+
+        return redirect()->route('notes.index');
     }
 }

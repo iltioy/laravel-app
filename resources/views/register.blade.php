@@ -33,7 +33,7 @@
         <span class="error">@error('password') {{$message}} @enderror</span>
     </div>
 
-    <button type="submit">Submit</button>
+    <button type="submit" class="button">Submit</button>
 </form>
 
 @endsection

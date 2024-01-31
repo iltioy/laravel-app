@@ -3,11 +3,28 @@
 <head>
     <title>@yield('title')</title>
     @yield('styles')
+    @yield('sctipt')
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
+    <script>
+        const navigateToNote = (noteId) => {
+            window.location.href = `http://localhost:8000/notes/${noteId}`
+        } 
+        const navigateBack = () => {
+            window.location.href = 'http://localhost:8000/notes'
+        }
+
+        const navigateToEdit = (noteId) => {
+            window.location.href = `http://localhost:8000/notes/${noteId}/edit`
+        }
+
+        const navigateToCreate = () => {
+            window.location.href = `http://localhost:8000/notes/create`
+        }
+    </script>
 </head>
 
 <style>
@@ -24,13 +41,16 @@
         outline: none;
     }
 
-    button {
+    .button {
         outline: none;
-        background: white;
+        background: rgb(73, 14, 175);
+        color: white;
         border: 1px solid #ccc;
         border-radius: 5px;
         padding: 10px;
         cursor: pointer;
+        display: inline;
+        font-size: 16px;
     }
 
     .inputItem {
