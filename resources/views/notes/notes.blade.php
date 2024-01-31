@@ -9,6 +9,11 @@
         flex-direction: column;
         width: 400px;
     }
+
+    a {
+        text-decoration: none;
+        under
+    }
 </style>
 @endsection
 
@@ -20,7 +25,10 @@
             <x-note text="{{$note->body}}" id="{{$note->id}}" />
     @endforeach
 
-    <button onclick="navigateToCreate()" class="button" style="width: 100px">Create</button>
+    <div>
+        <button onclick="navigateToCreate()" class="button" style="width: 100px">Create</button>
+        <a href="/auth/logout"><button class="button" style="width: 100px">Logout</button></a>
+    </div>
 </div>
 
 

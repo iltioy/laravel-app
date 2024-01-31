@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')->group(function() {
     Route::post('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
+    Route::get('/logout', [AuthController::class, 'logout']);
 
     Route::view('/register', 'register');
     Route::view('/login', 'login');
